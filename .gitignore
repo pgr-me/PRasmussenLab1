@@ -1,5 +1,8 @@
-# Mac files
+"""Peter Rasmussen, Lab 1, stack.py"""
+# Mac and PyCharm files
 .DS_Store
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
