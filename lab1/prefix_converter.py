@@ -1,4 +1,27 @@
-"""Peter Rasmussen, Lab 1, prefix_converter.py"""
+"""Peter Rasmussen, Lab 1, prefix_converter.py
+
+This module provides the PrefixConverter and PrefixSyntaxError classes. The PrefixConverter class
+converts a file of newline-delimited prefix expressions, when possible, into their postfix
+equivalents. Outputs are saved into a text file, an example of which is shown below:
+
+Example output file:
+    # Peter Rasmussen, Lab 1
+    # Input file: /Users/peter/PycharmProjects/PRasmussenLab1/resources/required_input.txt
+    # Output file: /Users/peter/PycharmProjects/PRasmussenLab1/resources/required_output.txt
+
+    Line 1: Prefix: -+ABC, Postfix: AB+C-
+    Line 2: Prefix: -A+BC, Postfix: ABC+-
+    Line 3: Prefix: /A+BC +C*BA  , Postfix: PrefixSyntaxError('Column 11: Too few operators, ...
+
+Header statements make up the first four lines of the output file. Prefix processing outputs are
+listed line by line thereafter. Each line of prefix output begins with the line number of the
+corresponding prefix expression. Then, the original prefix statement is echoed. Finally, The postfix
+expression is written.
+
+Prefix statements with syntax errors are not converted into postfix. Instead, an error
+message encapsulated in PrefixSyntaxError object is written to in lieu of a postfix expression.
+
+"""
 
 # standard library imports
 from typing import Union
@@ -10,12 +33,6 @@ from lab1.stack import Stack
 
 class PrefixSyntaxError(Exception):
     """Exception to capture prefix syntax errors."""
-
-    pass
-
-
-class PrefixSyntaxError(Exception):
-    """Exception to capture postfix syntax errors."""
 
     pass
 
