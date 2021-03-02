@@ -1,8 +1,8 @@
 from sys import stderr
 from typing import TextIO
 from time import time_ns
-from proj0.base_converter import BaseConverter
-from proj0.runtime_metric import RuntimeMetric
+from lab1.base_converter import BaseConverter
+from lab1.runtime_metric import RuntimeMetric
 
 
 def human_readable_binary_string(binary_string: str) -> str:
