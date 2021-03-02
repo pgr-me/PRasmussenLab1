@@ -1,3 +1,4 @@
+"""Peter Rasmussen, Lab 1, stack.py"""
 # This file is used to help expose what functions, classes, etc are available
 # to other scripts when the module is imported.
 
@@ -7,4 +8,4 @@
 # Here we're very simply making it easier for other scripts to access the
 # process_files function. Note: other scripts and functions are still
 # accessible
-from proj0.proj0 import process_files
+from lab1.lab1 import process_files
