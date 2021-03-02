@@ -1,4 +1,4 @@
-"""Peter Rasmussen, Lab 1, stack.py"""
+"""Peter Rasmussen, Lab 1, prefix_converter.py"""
 
 # standard library imports
 from typing import Union
@@ -31,14 +31,14 @@ class PrefixConverter:
         self,
         input_file: Union[str, Path],
         output_file: Union[str, Path],
-        include_numerals: bool = False,
+        use_numerals: bool = False,
         output_file_header="Peter Rasmussen, Lab 1",
     ) -> None:
         """
         Initialize IO attributes and output file header and define symbol set
         :param input_file: Input file to read
         :param output_file: Output file to write
-        :param include_numerals: True to include numerals among accepted_symbols
+        :param use_numerals: True to include numerals among accepted_symbols
         :param output_file_header: Preface output with file header
         """
         self.input_file = Path(input_file)
@@ -52,7 +52,7 @@ class PrefixConverter:
             f"# Input file: {self.input_file.absolute()}\n"
             f"# Output file: {self.output_file.absolute()}\n"
         )
-        if include_numerals:
+        if use_numerals:
             self.operand_symbols += self.numerals
             self.output_file_header += (
                 "# Numerals included: Please note numerals are only valid "
@@ -124,7 +124,7 @@ class PrefixConverter:
 
                     self.output_string += (
                         f"Line {line}: Prefix: {prefix_expression}, "
-                        "Postfix: {postfix_conversion}\n"
+                        f"Postfix: {postfix_conversion}\n"
                     )
 
                     # Reset prefix_stack, op counts, line and column numbers, and error string

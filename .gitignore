@@ -1,4 +1,9 @@
 """Peter Rasmussen, Lab 1, stack.py"""
+# Non-input resource files
+*.txt
+!resources/required_input.txt
+!resources/additional_input.txt
+
 # Mac and PyCharm files
 .DS_Store
 .idea/

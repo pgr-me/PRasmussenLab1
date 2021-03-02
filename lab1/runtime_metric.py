@@ -1,3 +1,5 @@
+"""Peter Rasmussen, Lab 1, stack.py"""
+
 class RuntimeMetric:
     def __init__(self, size: int, time_ns: float):
         """
