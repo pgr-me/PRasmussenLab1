@@ -35,17 +35,17 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument("--in_file", "-i", type=Path, help="Input File Pathname")
 arg_parser.add_argument("--out_file", "-o", type=Path, help="Output File Pathname")
 arg_parser.add_argument(
-    "--use_numerals",
-    "-n",
-    default=False,
-    type=bool,
-    help="Include numerals as accepted operands",
-)
-arg_parser.add_argument(
     "--file_header",
     "-f",
     default="Peter Rasmussen, Lab 1",
     type=str,
+    help="Include numerals as accepted operands",
+)
+arg_parser.add_argument(
+    "--use_numerals",
+    "-n",
+    default=False,
+    type=bool,
     help="Include numerals as accepted operands",
 )
 args = arg_parser.parse_args()

@@ -6,8 +6,8 @@ equivalents.
 
 Example output file:
     # Peter Rasmussen, Lab 1
-    # Input file: /Users/peter/PycharmProjects/PRasmussenLab1/resources/required_input.txt
-    # Output file: /Users/peter/PycharmProjects/PRasmussenLab1/resources/required_output.txt
+    # Input file: /path/to/required_input.txt
+    # Output file: /path/required_output.txt
 
     Line 1: Prefix: -+ABC, Postfix: AB+C-
     Line 2: Prefix: -A+BC, Postfix: ABC+-
