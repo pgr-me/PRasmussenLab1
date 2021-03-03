@@ -2,7 +2,7 @@
 
 This module provides the PrefixConverter and PrefixSyntaxError classes. The PrefixConverter class
 converts a file of newline-delimited prefix expressions, when possible, into their postfix
-equivalents. Outputs are saved into a text file, an example of which is shown below:
+equivalents.
 
 Example output file:
     # Peter Rasmussen, Lab 1
@@ -13,10 +13,17 @@ Example output file:
     Line 2: Prefix: -A+BC, Postfix: ABC+-
     Line 3: Prefix: /A+BC +C*BA  , Postfix: PrefixSyntaxError('Column 11: Too few operators, ...
 
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    Complexity outputs
+    Function: convert_prefix_input	Time (ns): 10375000	Loops: 3
+    Function: convert_prefix_stack	Time (ns): 7775000	Loops: 9
+    Function: _convert_prefix_stack	Time (ns): 7190000	Loops: 8
+
 Header statements make up the first four lines of the output file. Prefix processing outputs are
 listed line by line thereafter. Each line of prefix output begins with the line number of the
 corresponding prefix expression. Then, the original prefix statement is echoed. Finally, The postfix
-expression is written.
+expression is written. Below the conversion outputs are complexity outputs: time and number of
+loops, a crude proxy for space complexity.
 
 Prefix statements with syntax errors are not converted into postfix. Instead, an error
 message encapsulated in PrefixSyntaxError object is written to in lieu of a postfix expression.
@@ -24,8 +31,9 @@ message encapsulated in PrefixSyntaxError object is written to in lieu of a post
 """
 
 # standard library imports
-from typing import Union
 from pathlib import Path
+from time import time_ns
+from typing import Union
 
 # local imports
 from lab1.stack import Stack
@@ -81,12 +89,18 @@ class PrefixConverter:
         self.accepted_symbols = (
             self.operator_symbols + self.operand_symbols + self.other_symbols
         )
+        # This dictionary is NOT used for any of the conversion operations
+        # It is only used to measure time complexity
+        self.complexity_dict = {"convert_prefix_input": {"loops": 0, "time": 0},
+                                "convert_prefix_stack": {"loops": 0, "time": 0},
+                                "_convert_prefix_stack": {"loops": 0, "time": 0}}
 
-    def convert_prefix_input(self) -> None:
+    def convert_prefix_input(self) -> str:
         """
         Convert prefix input from file, echoing inputs and postfix conversions to output file.
-        :return: None
+        :return: Echoed prefix with corresponding postfix equivalents; summary stats at file bottom
         """
+        start = time_ns()
         prefix_stack = Stack()
         operand_count = 0
         operator_count = 0
@@ -99,15 +113,20 @@ class PrefixConverter:
         with open(self.input_file, "r") as f:
 
             # While loop adapted from https://www.geeksforgeeks.org/python-program-to-read-character-by-character-from-a-file/
-            # Specifically, lines 65 through 69
+            # Specifically, lines 119 through 122
             # The while loop iterates at the character level
+            symbol_count = 0
             while 1:
 
                 # Read each character and push to prefix stack
                 symbol = f.read(1)
                 prefix_stack.push(symbol)
+
                 # Increment column after we finish processing the current symbol
                 column += 1
+
+                # Increment symbol count
+                symbol_count += 1
 
                 # Check if symbol is legal
                 error = self.check_if_legal_character(symbol, column, error=error)
@@ -171,7 +190,8 @@ class PrefixConverter:
                 # Terminate while loop if we reach end of file
                 if symbol == "":
                     break
-
+        elapsed = time_ns() - start
+        self.complexity_dict['convert_prefix_input'] = {"time": elapsed, "loops": line}
         return self.output_string
 
     def convert_prefix_stack(self, stack: Stack) -> Stack:
@@ -181,8 +201,20 @@ class PrefixConverter:
         :param stack: Prefix stack to convert
         :return: Single-item postfix stack
         """
+        # Initialize time and loop metrics
+        start = time_ns()
+        loops = 0
         while stack.size > 1:
             stack = self._convert_prefix_stack(stack)
+            loops += 1
+
+        # Recover elapsed time and number of loops
+        elapsed = time_ns() - start
+        heretofore_elapsed = self.complexity_dict['convert_prefix_stack']['time']
+        heretofore_loops = self.complexity_dict['convert_prefix_stack']['loops']
+        elapsed += heretofore_elapsed
+        loops += heretofore_loops
+        self.complexity_dict['convert_prefix_stack'] = {"time": elapsed, "loops": loops}
         return stack
 
     def _convert_prefix_stack(self, pre_stack: Stack) -> Stack:
@@ -192,6 +224,10 @@ class PrefixConverter:
         :param pre_stack: Prefix stack to convert
         :return: Partially or wholly converted prefix stack
         """
+        # Initialize time and loop metrics
+        start = time_ns()
+        loops = 0
+
         stack = Stack(
             datatype=pre_stack.datatype, preallocation=pre_stack.preallocation
         )
@@ -207,14 +243,20 @@ class PrefixConverter:
                     pre_substring, value[0]
                 )
                 if self.is_prefix_term(pre_substring):
-                    # operand and operator definitions based on https://www.geeksforgeeks.org/prefix-postfix-conversion/
-                    # n.b. the Geeks for Geeks implementation referenced above is nonetheless wrong
+                    # Code from lines 247 to 251 informed by https://www.geeksforgeeks.org/prefix-postfix-conversion/
                     operand_2 = stack.pop()
                     operand_1 = stack.pop()
                     operator = stack.pop()
                     post_substring = operand_1 + operand_2 + operator
                     stack.push(post_substring)
         stack = PrefixConverter.reverse_stack(stack)
+        # Recover elapsed time and number of loops
+        elapsed = time_ns() - start
+        heretofore_elapsed = self.complexity_dict['convert_prefix_stack']['time']
+        heretofore_loops = self.complexity_dict['convert_prefix_stack']['loops']
+        elapsed += heretofore_elapsed
+        loops += heretofore_loops
+        self.complexity_dict['_convert_prefix_stack'] = {"time": elapsed, "loops": loops}
         return stack
 
     def check_for_leading_operand(
@@ -331,7 +373,16 @@ class PrefixConverter:
         :return:
         """
         with open(self.output_file, "w") as f:
+            # Write prefix-to-postfix conversion outputs
             f.write(self.output_string)
+            # Write complexity stats
+            f.write('\n')
+            f.write(80 * '@')
+            f.write('\nComplexity outputs')
+            for function, di in self.complexity_dict.items():
+                loops = di["loops"]
+                time = di["time"]
+                f.write(f"\nFunction: {function}\tTime (ns): {time}\tLoops: {loops}")
 
     @staticmethod
     def check_op_counts(

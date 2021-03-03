@@ -1,4 +1,15 @@
-"""Peter Rasmussen, Lab 1, stack.py"""
+"""Peter Rasmussen, Lab 1, stack.py
+
+
+This module provides Stack, StackUnderflowError, and StackOverflowError classes. The Stack class is
+the fundamental data structure of this program, and includes all of the methods specified in that
+data structure's ADT. The Stack class is implemented using an array of user-specified size
+preallocation. The StackUnderflowError and StackOverflowError classes are custom classes that catch
+instances when an empty stack is popped or a full stack is pushed, respectively.  PrefixConverter
+class converts a file of newline-delimited prefix expressions, when possible, into their postfix
+equivalents.
+
+"""
 
 from typing import Union
 
