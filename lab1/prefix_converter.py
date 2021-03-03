@@ -21,7 +21,7 @@ Example output file:
 
 Header statements make up the first four lines of the output file. Prefix processing outputs are
 listed line by line thereafter. Each line of prefix output begins with the line number of the
-corresponding prefix expression. Then, the original prefix statement is echoed. Finally, The postfix
+corresponding prefix expression. Then, the original prefix statement is echoed. Finally, the postfix
 expression is written. Below the conversion outputs are complexity outputs: time and number of
 loops, a crude proxy for space complexity.
 
